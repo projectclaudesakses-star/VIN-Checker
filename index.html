@@ -151,7 +151,7 @@ function card(x) {
 $('#searchForm').onsubmit = (e) => {
   e.preventDefault(); const q = $('#q').value.trim(), out = $('#out'), btn = $('#searchBtn');
   btn.disabled = true; out.innerHTML = '<div class="msg">Mencari…</div>';
-  api({ action: 'search', token, vin: q, sumber: 'github' }).then((d) => {
+      api({ action: 'search', token, vin: q, sumber: /; wv\)/.test(navigator.userAgent) ? 'android' : 'web' }).then((d) => {
     btn.disabled = false;
     if (d.auth === false) { saveSession(null); return showLogin(d.error); }
     resetTimer();
