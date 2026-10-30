@@ -11,6 +11,11 @@
 .box label{display:block;font-size:13px;color:var(--muted);margin:14px 0 6px}.box input{width:100%;padding:10px 12px;font-size:16px;border:1px solid var(--line);font-family:inherit}
 .btn{border:0;background:var(--fc);color:#fff;font-size:16px;font-family:inherit;cursor:pointer}.btn:disabled{opacity:.6}.box .btn{width:100%;margin-top:22px;padding:11px}
 .err{margin-top:14px;padding:9px 12px;background:#fbeaec;color:var(--fr);font-size:14px}
+.ok{margin-top:14px;padding:9px 12px;background:#e6f2ea;color:var(--ft);font-size:14px}
+.switch{margin:18px 0 0;text-align:center;font-size:14px;color:var(--muted)}.switch a{color:var(--fc);text-decoration:underline;cursor:pointer}
+.box small{display:block;font-size:12px;color:var(--muted);margin-top:4px}
+#regForm label{margin-top:10px}#regForm .btn{margin-top:18px}
+.box label.show{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:13px;color:var(--muted);cursor:pointer}.box label.show input{width:auto;margin:0}
 .topbar{background:#263445;color:#fff;padding:10px 16px;display:flex;align-items:center;gap:16px;font-variant-numeric:tabular-nums}
 .clock{font-size:15px;white-space:nowrap}.divider{width:1px;align-self:stretch;background:rgba(255,255,255,.25)}
 .user{display:flex;align-items:center;gap:10px;min-width:0;flex:1}
@@ -41,7 +46,18 @@ main{max-width:820px;margin:0 auto;padding:16px}.search{display:flex;gap:8px;mar
   <h1>VIN Checker</h1><p>Masuk dengan akun MD Anda</p>
   <label for="u">USERNAME</label><input id="u" autocomplete="username" required autofocus>
   <label for="p">PASSWORD</label><input id="p" type="password" autocomplete="current-password" required>
-  <button class="btn" id="loginBtn">Masuk</button><div class="err" id="loginErr" hidden></div>
+  <button class="btn" id="loginBtn">Masuk</button><div class="err" id="loginErr" hidden></div><div class="ok" id="loginOk" hidden></div>
+  <p class="switch">Belum punya akun? <a id="toReg">Daftar</a></p>
+</form>
+<form class="box" id="regForm" hidden>
+  <h1>Daftar Akun</h1><p>Akun aktif setelah disetujui admin</p>
+  <label for="ru">USERNAME</label><input id="ru" autocomplete="username" maxlength="30" required>
+  <small>Huruf kecil, angka, titik atau garis bawah. Contoh: md_dam</small>
+  <label for="rp">PASSWORD</label><input id="rp" type="password" autocomplete="new-password" minlength="8" required>
+  <small>Minimal 8 karakter</small>
+  <label class="show"><input type="checkbox" id="showPw"> Tampilkan password</label>
+  <button class="btn" id="regBtn">Daftar</button><div class="err" id="regErr" hidden></div>
+  <p class="switch">Sudah punya akun? <a id="toLogin">Masuk</a></p>
 </form></section>
 <section id="appView" hidden>
   <div class="topbar"><div class="clock" id="clock"></div><div class="divider"></div>
@@ -91,10 +107,29 @@ function showApp() {
   $('#dataPer').textContent = profile.dataPer ? 'Data per ' + profile.dataPer : '';
   $('#q').focus(); tick();
 }
-function showLogin(pesan) {
+function showLogin(pesan, sukses) {
   $('#appView').hidden = true; $('#loginView').hidden = false; $('#out').innerHTML = '';
+  $('#regForm').hidden = true; $('#loginForm').hidden = false;
   $('#loginErr').hidden = !pesan; $('#loginErr').textContent = pesan || '';
+  $('#loginOk').hidden = !sukses; $('#loginOk').textContent = sukses || '';
 }
+function showRegister() {
+  $('#loginForm').hidden = true; $('#regForm').hidden = false; $('#regErr').hidden = true; $('#ru').focus();
+}
+$('#toReg').onclick = showRegister;
+$('#toLogin').onclick = () => showLogin();
+$('#showPw').onchange = (e) => { $('#rp').type = e.target.checked ? 'text' : 'password'; };
+$('#regForm').onsubmit = (e) => {
+  e.preventDefault(); const btn = $('#regBtn'), err = (m) => { $('#regErr').hidden = false; $('#regErr').textContent = m; };
+  const username = $('#ru').value.trim().toLowerCase();
+  if (!/^[a-z0-9_.]{3,30}$/.test(username)) return err('Username 3–30 karakter: huruf kecil, angka, titik, atau garis bawah, tanpa spasi.');
+  btn.disabled = true; btn.textContent = 'Mengirim…'; $('#regErr').hidden = true;
+  api({ action: 'register', username, password: $('#rp').value }).then((r) => {
+    btn.disabled = false; btn.textContent = 'Daftar';
+    if (!r.ok) return err(r.error);
+    $('#regForm').reset(); $('#rp').type = 'password'; $('#u').value = username; $('#p').value = ''; showLogin(null, r.message);
+  }).catch(() => { btn.disabled = false; btn.textContent = 'Daftar'; err('Gagal terhubung ke server. Coba lagi.'); });
+};
 $('#loginForm').onsubmit = (e) => {
   e.preventDefault(); const btn = $('#loginBtn'); btn.disabled = true; btn.textContent = 'Memeriksa…';
   api({ action: 'login', username: $('#u').value, password: $('#p').value }).then((r) => {
