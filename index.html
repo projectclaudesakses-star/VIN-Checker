@@ -25,7 +25,7 @@
 main{max-width:820px;margin:0 auto;padding:16px}.search{display:flex;gap:8px;margin-bottom:6px}
 .search input{flex:1;min-width:0;padding:11px 14px;font-size:18px;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--line);font-family:inherit}.search .btn{padding:0 22px}
 .hint,.dataper{font-size:12px;color:var(--muted);margin:0 0 10px}.msg{padding:12px 14px;background:#fff;border:1px solid var(--line);margin-bottom:14px}.msg.err{background:#fbeaec;color:var(--fr)}
-.panel{background:#fff;border:1px solid var(--line);padding:20px}.frame-no{font-size:13px;color:var(--muted);margin:-6px 0 12px}
+.panel{background:#fff;border:1px solid var(--line);padding:20px}.frame-no{font-size:13px;color:var(--muted);margin:-6px 0 12px;display:flex;flex-wrap:wrap;gap:2px 20px}.frame-no b{color:var(--ink);font-weight:600}
 .row3{display:grid;grid-template-columns:2.2fr 1fr 1fr;gap:22px;margin-bottom:22px}.tile{border:1px solid var(--line);box-shadow:2px 2px 4px rgba(0,0,0,.12);text-align:center;padding:10px 8px 14px}
 .lbl{font-size:19px;font-weight:300;text-transform:uppercase}.val{font-size:16px;font-weight:600;margin-top:12px;min-height:1.2em}
 .sec{border:1px solid var(--line);padding:6px;margin-bottom:22px}.sec:last-child{margin:0}.bar{color:#fff;text-align:center;font-size:18px;padding:3px 0}
@@ -37,7 +37,7 @@ main{max-width:820px;margin:0 auto;padding:16px}.search{display:flex;gap:8px;mar
  .topbar{padding:8px 10px;gap:10px}.clock{font-size:12px;line-height:1.25}.clock .sep{display:none}.clock .t{display:block;font-size:14px;font-weight:600}
  .avatar{width:30px;height:30px;font-size:12px}.who,.topbar a{font-size:12.5px}.timer{font-size:11px}
  main{padding:10px}.search input{padding:9px 10px;font-size:16px;letter-spacing:.05em}.search .btn{padding:0 16px;font-size:15px}.hint{display:none}.dataper{font-size:11px;margin-bottom:8px}
- .panel{padding:8px}.frame-no{margin:0 0 6px;font-size:11px}.row3{grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}.row3 .tile:first-child{grid-column:1/-1}
+ .panel{padding:8px}.frame-no{margin:0 0 6px;font-size:11.5px;gap:1px 14px}.row3{grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}.row3 .tile:first-child{grid-column:1/-1}
  .tile{padding:5px 6px 7px;box-shadow:none}.lbl{font-size:10.5px;font-weight:400;color:var(--muted)}.val{font-size:14px;margin-top:2px}
  .sec{padding:4px;margin-bottom:8px}.bar{font-size:13px;padding:2px 0}.cells{grid-template-columns:1fr .8fr 1.6fr;gap:4px;margin-top:4px}
  .cell{min-height:0;padding:4px 3px 6px}.cell .val{margin-top:2px;font-size:13px}.none .wide::after{font-size:11px}}
@@ -145,7 +145,7 @@ function card(x) {
     return `<div class="sec ${k} ${a.done ? '' : 'none'}"><div class="bar">${judul}</div><div class="cells">${c('Main Dealer', a.main_dealer)}${c('Dealer', a.dealer)}${c('Tanggal', a.tanggal, 'wide')}</div></div>`;
   };
   const tile = (l, v) => `<div class="tile"><div class="lbl">${l}</div><div class="val">${esc(v)}</div></div>`;
-  return `<div class="panel"><div class="frame-no">No. VIN: ${esc(x.no_frame)}</div><div class="row3">${tile('Sales', x.sales)}${tile('Model', x.model)}${tile('Prod. Year', x.tahun)}</div>`
+  return `<div class="panel"><div class="frame-no"><span>No. VIN: <b>${esc(x.no_frame)}</b></span><span>No. Mesin: <b>${esc(x.engine_no)}</b></span></div><div class="row3">${tile('Sales', x.sales)}${tile('Model', x.model)}${tile('Prod. Year', x.tahun)}</div>`
     + sec('fc', 'Frame Check') + sec('ft', 'Frame Treatment') + sec('fr', 'Frame Replacement') + '</div>';
 }
 $('#searchForm').onsubmit = (e) => {
