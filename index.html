@@ -34,6 +34,7 @@ main{max-width:820px;margin:0 auto;padding:16px}.search{display:flex;gap:8px;mar
 .none .cell{background:var(--empty);border-color:var(--empty);position:relative}.none .cell>*{visibility:hidden}
 .none .wide::after{content:"Belum pernah dilakukan";position:absolute;inset:0;display:grid;place-items:center;color:#8a8886;font-size:14px}
 .mark{margin-top:6px;padding:8px 10px;background:#fbeaec;border:1px solid #e7b4ba;border-left:5px solid var(--fr);color:var(--fr);text-align:center;font-size:14px;line-height:1.35}.mark b{display:block;font-size:15px}
+.mark.back{background:#e6f2ea;border-color:#b5d6c1;border-left-color:var(--ft);color:var(--ft)}
 @media(max-width:600px){
  .topbar{padding:8px 10px;gap:10px}.clock{font-size:12px;line-height:1.25}.clock .sep{display:none}.clock .t{display:block;font-size:14px;font-weight:600}
  .avatar{width:30px;height:30px;font-size:12px}.who,.topbar a{font-size:12.5px}.timer{font-size:11px}
@@ -146,7 +147,9 @@ function card(x) {
     const a = x[k] || { done: false }, c = (l, v, w) => `<div class="cell ${w || ''}"><div class="lbl">${l}</div><div class="val">${esc(v)}</div></div>`;
     return `<div class="sec ${k} ${a.done ? '' : 'none'}"><div class="bar">${judul}</div><div class="cells">${c('Main Dealer', a.main_dealer)}${c('Dealer', a.dealer)}${c('Tanggal', a.tanggal, 'wide')}</div>${extra || ''}</div>`;
   };
-  const mark = x.cek_marking ? '<div class="mark"><b>⚠ CEK MARKING PADA RANGKA</b>Rangka Belum Terpasang / VIN Belum Kembali</div>' : '';
+  const mark = !(x.fr && x.fr.done) ? ''
+    : x.cek_marking ? '<div class="mark"><b>⚠ CEK MARKING PADA RANGKA</b>Rangka Belum Terpasang / VIN Belum Kembali</div>'
+    : '<div class="mark back"><b>✓ VIN Sudah Kembali</b></div>';
   const tile = (l, v) => `<div class="tile"><div class="lbl">${l}</div><div class="val">${esc(v)}</div></div>`;
   return `<div class="panel"><div class="frame-no"><span>No. VIN: <b>${esc(x.no_frame)}</b></span><span>No. Mesin: <b>${esc(x.engine_no)}</b></span></div><div class="row3">${tile('Sales', x.sales)}${tile('Model', x.model)}${tile('Prod. Year', x.tahun)}</div>`
     + sec('fc', 'Frame Check') + sec('ft', 'Frame Treatment') + sec('fr', 'Frame Replacement', mark) + '</div>';
