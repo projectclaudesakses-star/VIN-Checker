@@ -149,7 +149,7 @@ function card(x) {
   };
   const mark = !(x.fr && x.fr.done) ? ''
     : x.cek_marking ? '<div class="mark"><b>⚠ CEK MARKING PADA RANGKA</b>Rangka Belum Terpasang / VIN Belum Kembali<span style="display:block;margin-top:4px;font-weight:700">Silahkan Hubungi Main Dealer!</span></div>'
-    : '<div class="mark back"><b>✓ VIN Sudah Kembali</b></div>';
+    : '<div class="mark back"><b>✓ Rangka Sudah Terpasang</b>VIN Sudah Kembali</div>';
   const tile = (l, v) => `<div class="tile"><div class="lbl">${l}</div><div class="val">${esc(v)}</div></div>`;
   return `<div class="panel"><div class="frame-no"><span>No. VIN: <b>${esc(x.no_frame)}</b></span><span>No. Mesin: <b>${esc(x.engine_no)}</b></span></div><div class="row3">${tile('Sales', x.sales)}${tile('Model', x.model)}${tile('Prod. Year', x.tahun)}</div>`
     + sec('fc', 'Frame Check') + sec('ft', 'Frame Treatment') + sec('fr', 'Frame Replacement', mark) + '</div>';
