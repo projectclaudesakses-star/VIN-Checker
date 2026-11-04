@@ -148,7 +148,7 @@ function card(x) {
     return `<div class="sec ${k} ${a.done ? '' : 'none'}"><div class="bar">${judul}</div><div class="cells">${c('Main Dealer', a.main_dealer)}${c('Dealer', a.dealer)}${c('Tanggal', a.tanggal, 'wide')}</div>${extra || ''}</div>`;
   };
   const mark = !(x.fr && x.fr.done) ? ''
-    : x.cek_marking ? '<div class="mark"><b>⚠ CEK MARKING PADA RANGKA</b>Rangka Belum Terpasang / VIN Belum Kembali</div>'
+    : x.cek_marking ? '<div class="mark"><b>⚠ CEK MARKING PADA RANGKA</b>Rangka Belum Terpasang / VIN Belum Kembali<span style="display:block;margin-top:4px;font-weight:700">Silahkan Hubungi Main Dealer!</span></div>'
     : '<div class="mark back"><b>✓ VIN Sudah Kembali</b></div>';
   const tile = (l, v) => `<div class="tile"><div class="lbl">${l}</div><div class="val">${esc(v)}</div></div>`;
   return `<div class="panel"><div class="frame-no"><span>No. VIN: <b>${esc(x.no_frame)}</b></span><span>No. Mesin: <b>${esc(x.engine_no)}</b></span></div><div class="row3">${tile('Sales', x.sales)}${tile('Model', x.model)}${tile('Prod. Year', x.tahun)}</div>`
