@@ -52,6 +52,7 @@ main{max-width:820px;margin:0 auto;padding:16px}.search{display:flex;gap:8px;mar
   <h1>VIN Checker</h1><p>Masuk dengan akun MD Anda</p>
   <label for="u">USERNAME</label><input id="u" autocomplete="username" required autofocus>
   <label for="p">PASSWORD</label><input id="p" type="password" autocomplete="current-password" required>
+  <label class="show"><input type="checkbox" id="showPw0"> Tampilkan password</label>
   <button class="btn" id="loginBtn">Masuk</button><div class="err" id="loginErr" hidden></div><div class="ok" id="loginOk" hidden></div>
   <p class="switch"><a id="toRst">Lupa password?</a><br>Belum punya akun? <a id="toReg">Daftar</a></p>
 </form>
@@ -173,6 +174,7 @@ $('#pwForm').onsubmit = (e) => {
   }).catch(() => { btn.disabled = false; btn.textContent = 'Simpan'; err('Gagal terhubung ke server. Coba lagi.'); });
 };
 $('#toLogin').onclick = () => showLogin();
+$('#showPw0').onchange = (e) => { $('#p').type = e.target.checked ? 'text' : 'password'; };
 $('#showPw').onchange = (e) => { $('#rp').type = e.target.checked ? 'text' : 'password'; };
 $('#regForm').onsubmit = (e) => {
   e.preventDefault(); const btn = $('#regBtn'), err = (m) => { $('#regErr').hidden = false; $('#regErr').textContent = m; };
@@ -190,7 +192,7 @@ $('#loginForm').onsubmit = (e) => {
   api({ action: 'login', username: $('#u').value, password: $('#p').value }).then((r) => {
     btn.disabled = false; btn.textContent = 'Masuk';
     if (!r.ok) return showLogin(r.error);
-    $('#p').value = ''; saveSession(r.token, { nama: r.nama, dataPer: r.dataPer, sesiDetik: r.sesiDetik || 60 }); resetTimer(); showApp();
+    $('#p').value = ''; $('#p').type = 'password'; $('#showPw0').checked = false; saveSession(r.token, { nama: r.nama, dataPer: r.dataPer, sesiDetik: r.sesiDetik || 60 }); resetTimer(); showApp();
   }).catch(() => { btn.disabled = false; btn.textContent = 'Masuk'; showLogin('Gagal terhubung ke server. Coba lagi.'); });
 };
 $('#logoutBtn').onclick = () => keluar();
